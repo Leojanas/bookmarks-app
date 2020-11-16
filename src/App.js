@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import AddBookmark from './AddBookmark/AddBookmark';
+import UpdateBookmark from './UpdateBookmark/UpdateBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
 import BookmarksContext from './BookmarksContext';
 import Nav from './Nav/Nav';
@@ -45,8 +46,9 @@ class App extends Component {
   }
 
   addBookmark = bookmark => {
+    const bookmarks = this.state.bookmarks
     this.setState({
-      bookmarks: [ ...this.state.bookmarks, bookmark ],
+      bookmarks: [ ...bookmarks, bookmark ],
     })
   }
 
@@ -56,6 +58,16 @@ class App extends Component {
     )
     this.setState({
       bookmarks: newBookmarks
+    })
+  }
+
+  updateBookmark = bookmark => {
+    let bookmarks = this.state.bookmarks.filter(bm => 
+      bm.id !== bookmark.id
+    )
+    bookmarks.push(bookmark)
+    this.setState({
+      bookmarks: bookmarks
     })
   }
 
@@ -81,7 +93,8 @@ class App extends Component {
     const contextValue = {
       bookmarks: this.state.bookmarks,
       addBookmark: this.addBookmark,
-      deleteBookmark: this.deleteBookmark
+      deleteBookmark: this.deleteBookmark,
+      updateBookmark: this.updateBookmark
     }
     return (
       <main className='App'>
@@ -91,12 +104,7 @@ class App extends Component {
         <div className='content' aria-live='polite'>
           <Route
             path='/add-bookmark'
-            render={({ history }) => {
-              return <AddBookmark
-                onAddBookmark={this.addBookmark}
-                onClickCancel={() => history.push('/')}
-              />
-            }}
+            component={AddBookmark}
           />
           <Route
             exact
@@ -104,6 +112,10 @@ class App extends Component {
             render={({ history }) => {
               return <BookmarkList bookmarks={bookmarks} />
             }}
+          />
+          <Route
+            path='/edit/:id'
+            component={UpdateBookmark}
           />
         </div>
         </BookmarksContext.Provider> 

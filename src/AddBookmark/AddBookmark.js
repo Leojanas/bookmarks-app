@@ -2,7 +2,6 @@ import React, { Component } from  'react';
 import BookmarksContext from '../BookmarksContext';
 import config from '../config'
 import './AddBookmark.css';
-import {withRouter} from 'react-router-dom';
 
 const Required = () => (
   <span className='AddBookmark__required'>*</span>
@@ -140,4 +139,4 @@ class AddBookmark extends Component {
   }
 }
 
-export default withRouter(AddBookmark);
+export default AddBookmark;
